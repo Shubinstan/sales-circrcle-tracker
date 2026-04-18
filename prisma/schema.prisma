@@ -1,0 +1,54 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String           @id @default(cuid())
+  email           String           @unique
+  password        String           // Hashed password string
+  taskProgresses  TaskProgress[]
+  jobApplications JobApplication[]
+  
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model TaskProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  taskId      String   // String ID that will map to our frontend PDF constants
+  isCompleted Boolean  @default(false)
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Ensure a user only has one progress record per specific task
+  @@unique([userId, taskId])
+}
+
+model JobApplication {
+  id        String   @id @default(cuid())
+  userId    String
+  
+  // Fields mapped from the PDF "Things I Track Personally" section
+  date      DateTime
+  company   String
+  role      String
+  stage     String
+  outcome   String?  // Optional, as it might be pending
+  notes     String?  // Optional notes
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
