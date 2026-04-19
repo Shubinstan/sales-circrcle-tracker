@@ -1,4 +1,5 @@
 // app/page.tsx
+import { redirect } from "next/navigation";
 import { auth, signOut } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,9 @@ import { LogOut } from "lucide-react";
 export default async function Home() {
   const session = await auth();
 
-  if (!session?.user?.id) return null;
+  if (!session?.user?.id) {
+  redirect("/login");
+}
 
   const userProgress = await prisma.taskProgress.findMany({
     where: { userId: session.user.id, isCompleted: true },
