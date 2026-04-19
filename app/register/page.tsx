@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { registerUser } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,23 +14,36 @@ import Link from "next/link";
  * RegisterPage Component (Client Component)
  * Provides the UI for new user registration.
  * Delegates the actual database mutation to a Server Action to ensure secure execution environment.
+ * Implements graceful error handling to display user-friendly validation messages.
  */
 export default function RegisterPage() {
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   /**
-   * Handles form submission by invoking the registerUser Server Action.
-   * Catches and displays server-side validation errors in the client UI.
+   * Handles form submission and interprets the Server Action's Result Object.
    */
   const handleSubmit = async (formData: FormData) => {
     setIsLoading(true);
     setError(null);
+    
     try {
-      // Execute the Server Action securely. Database logic remains hidden from the client.
-      await registerUser(formData);
-    } catch (err: any) {
-      setError(err.message || "An error occurred during registration");
+      // 1. Execute the Server Action securely
+      const result = await registerUser(formData);
+      
+      // 2. Check the structured response
+      if (result?.error) {
+        // Display the user-friendly error message from the server
+        setError(result.error);
+        setIsLoading(false);
+      } else if (result?.success) {
+        // 3. Seamlessly redirect to login on success
+        router.push("/login"); 
+      }
+    } catch (err) {
+      // Fallback for network failures (e.g., user lost internet connection)
+      setError("Network error. Please check your connection.");
       setIsLoading(false);
     }
   };
@@ -42,7 +56,6 @@ export default function RegisterPage() {
           <CardDescription>Enter your email below to create your account</CardDescription>
         </CardHeader>
         <CardContent>
-          {/* Using Next.js 14 action attribute to seamlessly connect Client forms to Server Actions */}
           <form action={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -52,7 +65,8 @@ export default function RegisterPage() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" name="password" type="password" required />
             </div>
-            {error && <p className="text-sm text-red-500">{error}</p>}
+            {/* Conditional rendering for user-friendly error messages */}
+            {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Creating account..." : "Sign Up"}
             </Button>
