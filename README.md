@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Progress & Job Application Tracker
 
-## Getting Started
+A full-stack web application designed to track onboarding progress, weekly tasks, and job applications. Built with a focus on a modern, minimalistic UI, secure authentication, and optimistic data fetching.
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Secure Authentication:** Credential-based login system built with NextAuth.js (v5).
+- **Interactive Checklist:** Optimistic UI updates for a snappy, zero-latency feel when toggling tasks.
+- **Job Tracker (CRUD):** A dashboard to log and manage job applications, stages, and outcomes.
+- **Progress Visualization:** Dynamic progress bar calculating completion rates in real-time.
+- **Responsive Design:** Mobile-first approach using Tailwind CSS and Shadcn UI components.
+- **Server Actions:** Secure, API-less database mutations using Next.js Server Actions.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework:** [Next.js](https://nextjs.org/) (App Router)
+- **Language:** TypeScript
+- **Database:** PostgreSQL (hosted on [Neon](https://neon.tech/))
+- **ORM:** [Prisma](https://www.prisma.io/)
+- **Authentication:** [Auth.js v5](https://authjs.dev/)
+- **Styling:** Tailwind CSS
+- **UI Components:** [shadcn/ui](https://ui.shadcn.com/) & Lucide Icons
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ⚙️ Local Development
 
-## Learn More
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/your-username/sales-circle-tracker.git](https://github.com/your-username/sales-circle-tracker.git)
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Set up your environment variables by creating a `.env` file:
+   ```env
+   DATABASE_URL="your-postgresql-connection-string"
+   AUTH_SECRET="your-random-secret-key"
+   AUTH_URL="http://localhost:3000"
+   AUTH_TRUST_HOST=true
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. Push the database schema:
+   ```bash
+   npx prisma db push
+   ```
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
