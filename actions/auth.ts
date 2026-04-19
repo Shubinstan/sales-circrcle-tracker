@@ -2,7 +2,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma"; // Adjust path if needed
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 
 export async function registerUser(formData: FormData) {
